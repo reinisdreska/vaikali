@@ -31,5 +31,6 @@ def info():
         shop_info["contacts"] = "+371" + str(tags.find("strong").text)
 
         data.append({"address":shop_info["address"], "lat":shop_info["lat"],"lng":shop_info["lng"],"work_time":shop_info["work_time"],"contacts":shop_info["contacts"]})
+    print(data)
 
 saglaba()
