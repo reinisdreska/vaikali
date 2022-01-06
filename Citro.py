@@ -31,6 +31,14 @@ def info():
         shop_info["contacts"] = "+371" + str(tags.find("strong").text)
 
         data.append({"address":shop_info["address"], "lat":shop_info["lat"],"lng":shop_info["lng"],"work_time":shop_info["work_time"],"contacts":shop_info["contacts"]})
-    print(data)
+    get_json(data)
+
+def get_json(data):
+    data_str = ""
+    for row in data:
+        data_string = str(row).replace("'", '"').replace(r'\xa0', " ")
+        data_str += data_string
+    open("citro.json","w", encoding='UTF-8').write(data_str)
+
 
 saglaba()
