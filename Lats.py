@@ -30,14 +30,15 @@ def info():
             lng = tags.attrs['data-long']
             shop_info["lng"] = str(lng)
         else:
-            lat = "None"
-            shop_info["lat"] = str(lat)
-            lng = "None"
-            shop_info["lng"] = str(lng)
+            shop_info["lat"] = "None"
+            shop_info["lng"] = "None"
         tags = row.find("div", class_="HiddenTimeWork")
         shop_info["work_time"] = re.sub("\s+", " ", str(tags.text).replace("\n\n", "").replace("\n", "; ").replace(" : ", " ").replace("a:", "a")).replace("'", "").replace('"', '')
-        tags = row.find("span")
-        shop_info["contacts"] = "+371 " + str(tags.text).replace("'", "").replace('"', '')
+        tags = row.find(class_="Phone")
+        if tags:
+            shop_info["contacts"] = re.sub("\n+", "", "+371 " + str(tags.text).replace("'", "").replace('"', ''))
+        else:
+            shop_info["contacts"] = "None"
         
         data.append({"address":shop_info["address"], "lat":shop_info["lat"],"lng":shop_info["lng"],"work_time":shop_info["work_time"],"contacts":shop_info["contacts"]})
     get_json(data)
