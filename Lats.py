@@ -14,17 +14,26 @@ def info():
     data = []
     html = open("lats.html",'r', encoding='UTF-8').read()
     base = BeautifulSoup(html, "html.parser")
-    main = base.find_all("div", class_="table-responsive")
+    main = base.find_all("tr")
 
     for row in main:
         shop_info = {}
         tags = row.find("h4")
-        shop_info["address"] = str(tags.text).replace("'", "").replace('"', '')
-        tags = row.find('a')
-        lat = tags.attrs['data-lat']
-        shop_info["lat"] = float(lat)
-        lng = tags.attrs['data-long']
-        shop_info["lng"] = float(lng)
+        if str(tags) != "None":
+            shop_info["address"] = str(tags.text).replace("'", "").replace('"', '')
+        else:
+            continue
+        tags = row.find(class_="draw-ride")
+        if tags:
+            lat = tags.attrs['data-lat']
+            shop_info["lat"] = str(lat)
+            lng = tags.attrs['data-long']
+            shop_info["lng"] = str(lng)
+        else:
+            lat = "None"
+            shop_info["lat"] = str(lat)
+            lng = "None"
+            shop_info["lng"] = str(lng)
         tags = row.find("div", class_="HiddenTimeWork")
         shop_info["work_time"] = re.sub("\s+", " ", str(tags.text).replace("\n\n", "").replace("\n", "; ").replace(" : ", " ").replace("a:", "a")).replace("'", "").replace('"', '')
         tags = row.find("span")

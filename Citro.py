@@ -22,9 +22,9 @@ def info():
         shop_info["address"] = str(tags.text).replace("'", "").replace('"', '')
         tags = row.find('a')
         lat = tags.attrs['data-lat']
-        shop_info["lat"] = float(lat)
+        shop_info["lat"] = str(lat)
         lng = tags.attrs['data-lng']
-        shop_info["lng"] = float(lng)
+        shop_info["lng"] = str(lng)
         tags = row.find("div", class_="work-time")
         shop_info["work_time"] = str(tags.find("strong").text).replace("'", "").replace('"', '')
         tags = row.find("div", class_="contacts")
