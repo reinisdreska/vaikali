@@ -1,35 +1,35 @@
 import requests
 import json
 from bs4 import BeautifulSoup
+import re
 
-url = 'https://citro.lv/musu-veikali/'
-
+url = 'https://www.latts.lv/lats-veikali'
 
 def saglaba():
     results = requests.get(url)
-    open("citro.html",'w', encoding='UTF-8').write(results.text)
+    open("lats.html",'w', encoding='UTF-8').write(results.text)
     info()
 
 def info():
     data = []
-    html = open("citro.html",'r', encoding='UTF-8').read()
+    html = open("lats.html",'r', encoding='UTF-8').read()
     base = BeautifulSoup(html, "html.parser")
-    main = base.find_all("div", class_="col-lg-6")
+    main = base.find_all("div", class_="table-responsive")
 
     for row in main:
         shop_info = {}
-        tags = row.find("h2")
+        tags = row.find("h4")
         shop_info["address"] = str(tags.text).replace("'", "").replace('"', '')
         tags = row.find('a')
         lat = tags.attrs['data-lat']
         shop_info["lat"] = float(lat)
-        lng = tags.attrs['data-lng']
+        lng = tags.attrs['data-long']
         shop_info["lng"] = float(lng)
-        tags = row.find("div", class_="work-time")
-        shop_info["work_time"] = str(tags.find("strong").text).replace("'", "").replace('"', '')
-        tags = row.find("div", class_="contacts")
-        shop_info["contacts"] = "+371 " + str(tags.find("strong").text).replace("'", "").replace('"', '')
-
+        tags = row.find("div", class_="HiddenTimeWork")
+        shop_info["work_time"] = re.sub("\s+", " ", str(tags.text).replace("\n\n", "").replace("\n", "; ").replace(" : ", " ").replace("a:", "a")).replace("'", "").replace('"', '')
+        tags = row.find("span")
+        shop_info["contacts"] = "+371 " + str(tags.text).replace("'", "").replace('"', '')
+        
         data.append({"address":shop_info["address"], "lat":shop_info["lat"],"lng":shop_info["lng"],"work_time":shop_info["work_time"],"contacts":shop_info["contacts"]})
     get_json(data)
 
@@ -40,7 +40,6 @@ def get_json(data):
         data_str += "\t" + data_string + ","
         data_str = data_str + "\n"
     data_str = data_str[:-2] + "\n" + "]"
-    open("citro.json","w", encoding='UTF-8').write(data_str)
-
+    open("lats.json","w", encoding='UTF-8').write(data_str)
 
 saglaba()
