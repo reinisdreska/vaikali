@@ -19,25 +19,27 @@ def info():
     for row in main:
         shop_info = {}
         tags = row.find("h2")
-        shop_info["address"] = str(tags.text)
+        shop_info["address"] = str(tags.text).replace("'", "").replace('"', '')
         tags = row.find('a')
         lat = tags.attrs['data-lat']
         shop_info["lat"] = float(lat)
         lng = tags.attrs['data-lng']
         shop_info["lng"] = float(lng)
         tags = row.find("div", class_="work-time")
-        shop_info["work_time"] = str(tags.find("strong").text)
+        shop_info["work_time"] = str(tags.find("strong").text).replace("'", "").replace('"', '')
         tags = row.find("div", class_="contacts")
-        shop_info["contacts"] = "+371" + str(tags.find("strong").text)
+        shop_info["contacts"] = "+371" + str(tags.find("strong").text).replace("'", "").replace('"', '')
 
         data.append({"address":shop_info["address"], "lat":shop_info["lat"],"lng":shop_info["lng"],"work_time":shop_info["work_time"],"contacts":shop_info["contacts"]})
     get_json(data)
 
 def get_json(data):
-    data_str = ""
+    data_str = "[\n"
     for row in data:
         data_string = str(row).replace("'", '"').replace(r'\xa0', " ")
-        data_str += data_string
+        data_str += "\t" + data_string + ","
+        data_str = data_str + "\n"
+    data_str = data_str[:-2] + "\n" + "]"
     open("citro.json","w", encoding='UTF-8').write(data_str)
 
 
