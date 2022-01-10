@@ -65,15 +65,6 @@ def get_json(data):
     data_str = data_str[:-1] + '] }'
     parsed = json.loads(data_str)
     parsed_str = json.dumps(parsed, indent=6)
-    open("Citro.json","w", encoding='UTF-8').write(parsed_str)
-
-
-
-
-    # data_str = '{ "address":'+ '"'+data[0]["address"]+'"' +' }'
-    # parsed = json.loads(data_str)
-    # parsed_str = json.dumps(parsed, indent=4)
-    # open("citro.json","w", encoding='UTF-8').write(parsed_str)
-
+    open("Citro.json","w", encoding='UTF-8').write(parsed_str)\
 
 saglaba()
