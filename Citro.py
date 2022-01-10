@@ -34,13 +34,46 @@ def info():
     get_json(data)
 
 def get_json(data):
-    data_str = "[\n"
+    data_str = '{ "type": "FeatureCollection",  "features": ['
     for row in data:
-        data_string = str(row).replace("'", '"').replace(r'\xa0', " ")
-        data_str += "\t" + data_string + ","
-        data_str = data_str + "\n"
-    data_str = data_str[:-2] + "\n" + "]"
-    open("citro.json","w", encoding='UTF-8').write(data_str)
+        properties = {
+            "id" : len(str(row)),
+            "link" : "https://citro.lv/musu-veikali/",
+            "lat": float(row["lat"]),
+            "lng": float(row["lng"]),
+            "address": row["address"],
+            "email": "None",
+            "phone": row["contacts"],
+            "working_hours": row["work_time"],
+            "NOSAUKUMS": "Citro",
+            "SAIS_NOS": "Citro",
+            "GRUPA": "Pārtikas/mājsaimniecības preču tīklu veikali",
+            "STIPS": 11,
+            "TIPS": "tirdzniecibas centrs",
+            "Layer": "tirdzniecibas centrs",
+            "MEROGS": 0.0,
+            "WMS": 0,
+            "TELEFONS": row["contacts"],
+            "PIEZIMES": row["work_time"],
+            "X": float(row["lng"]),
+            "Y": float(row["lat"]),
+            "X1": "dms for lng",
+            "Y1": "dms for lat"
+        }
+        properties_str = json.dumps(properties)
+        data_str += '{"type": "Feature", "geometry": {"type": "Point", "coordinates": ['+row["lng"]+','+row["lat"]+']}, "properties": '+ properties_str +'},'
+    data_str = data_str[:-1] + '] }'
+    parsed = json.loads(data_str)
+    parsed_str = json.dumps(parsed, indent=6)
+    open("Citro.json","w", encoding='UTF-8').write(parsed_str)
+
+
+
+
+    # data_str = '{ "address":'+ '"'+data[0]["address"]+'"' +' }'
+    # parsed = json.loads(data_str)
+    # parsed_str = json.dumps(parsed, indent=4)
+    # open("citro.json","w", encoding='UTF-8').write(parsed_str)
 
 
 saglaba()
