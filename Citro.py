@@ -65,6 +65,6 @@ def get_json(data):
         }
         data_json["features"].append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [row["lng"], row["lat"]]}, "properties": properties})
     parsed = json.dumps(data_json, indent=6)
-    open("Citro_tests1.json","w", encoding='UTF-8').write(parsed)
+    open("Citro.json","w", encoding='UTF-8').write(parsed)
 
 saglaba()
