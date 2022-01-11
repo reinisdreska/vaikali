@@ -34,6 +34,39 @@ def info():
     get_json(data)
 
 def get_json(data):
+    data_json = {
+        "type": "FeatureCollection",
+        "features": []
+    }
+    for row in data:
+        properties = {
+            "id" : len(str(row)),
+            "link" : "https://citro.lv/musu-veikali/",
+            "lat": float(row["lat"]),
+            "lng": float(row["lng"]),
+            "address": row["address"],
+            "email": "None",
+            "phone": row["contacts"],
+            "working_hours": row["work_time"],
+            "NOSAUKUMS": "Citro",
+            "SAIS_NOS": "Citro",
+            "GRUPA": "Pārtikas/mājsaimniecības preču tīklu veikali",
+            "STIPS": 11,
+            "TIPS": "tirdzniecibas centrs",
+            "Layer": "tirdzniecibas centrs",
+            "MEROGS": 0.0,
+            "WMS": 0,
+            "TELEFONS": row["contacts"],
+            "PIEZIMES": row["work_time"],
+            "X": float(row["lng"]),
+            "Y": float(row["lat"]),
+            "X1": "dms for lng",
+            "Y1": "dms for lat"
+        }
+        data_json["features"].append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [row["lng"], row["lat"]]}, "properties": properties})
+    parsed = json.dumps(data_json, indent=6)
+    open("Citro_tests1.json","w", encoding='UTF-8').write(parsed)
+
     data_str = '{ "type": "FeatureCollection",  "features": ['
     for row in data:
         properties = {
@@ -65,6 +98,6 @@ def get_json(data):
     data_str = data_str[:-1] + '] }'
     parsed = json.loads(data_str)
     parsed_str = json.dumps(parsed, indent=6)
-    open("Citro.json","w", encoding='UTF-8').write(parsed_str)\
+    open("Citro_tests1.json","w", encoding='UTF-8').write(parsed_str)
 
 saglaba()
