@@ -44,12 +44,37 @@ def info():
     get_json(data)
 
 def get_json(data):
-    data_str = "[\n"
+    data_json = {
+        "type": "FeatureCollection",
+        "features": []
+    }
     for row in data:
-        data_string = str(row).replace("'", '"').replace(r'\xa0', " ")
-        data_str += "\t" + data_string + ","
-        data_str = data_str + "\n"
-    data_str = data_str[:-2] + "\n" + "]"
-    open("lats.json","w", encoding='UTF-8').write(data_str)
+        properties = {
+            "id" : len(str(row)),
+            "link" : "https://www.latts.lv/lats-veikali",
+            "lat": row["lat"],
+            "lng": row["lng"],
+            "address": row["address"],
+            "email": "None",
+            "phone": row["contacts"],
+            "working_hours": row["work_time"],
+            "NOSAUKUMS": "Lats",
+            "SAIS_NOS": "Lats",
+            "GRUPA": "Pārtikas/mājsaimniecības preču tīklu veikali",
+            "STIPS": 11,
+            "TIPS": "tirdzniecibas centrs",
+            "Layer": "tirdzniecibas centrs",
+            "MEROGS": 0.0,
+            "WMS": 0,
+            "TELEFONS": row["contacts"],
+            "PIEZIMES": row["work_time"],
+            "X": row["lng"],
+            "Y": row["lat"],
+            "X1": "dms for lng",
+            "Y1": "dms for lat"
+        }
+        data_json["features"].append({"type": "Feature", "geometry": {"type": "Point", "coordinates": [row["lng"], row["lat"]]}, "properties": properties})
+    parsed = json.dumps(data_json, indent=6)
+    open("Lats.json","w", encoding='UTF-8').write(parsed)
 
 saglaba()
