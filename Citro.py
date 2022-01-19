@@ -39,6 +39,8 @@ def get_json(data):
         "features": []
     }
     for row in data:
+        row["work_time"] = "Mo-Fr "+ row["work_time"].replace("\u00a0", " ").replace(" (režīms: sarkanais)", "").replace(" Se", "Sa").replace(" Sv", "Su")
+        row["work_time"] = row["work_time"].split(",")
         properties = {
             "id" : len(str(row)),
             "link" : "https://citro.lv/musu-veikali/",
